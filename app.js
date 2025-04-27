@@ -124,7 +124,9 @@ function showQuiz() {
     </div>
   `;
 
-  document.getElementById('userInput').focus(); // Make sure typing is automatic!
+  setTimeout(() => {
+  document.getElementById('userInput').focus();
+}, 50); // Make sure typing is automatic!
   speak(word.word);
 }
 
