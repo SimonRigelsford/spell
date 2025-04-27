@@ -37,7 +37,7 @@ const wordLists = {
     { word: "magician", definition: "a person who performs magic tricks", examples: ["The ______ pulled a rabbit from the hat.", "Everyone clapped for the ______."] },
     { word: "mystery", definition: "something difficult to explain or understand", examples: ["The book was a thrilling ______.", "Solving the ______ took weeks."] },
     { word: "typical", definition: "usual or expected", examples: ["It was a ______ rainy day.", "She gave a ______ answer."] },
-    { word: "gymnast", definition: "a person trained in gymnastics", examples: ["The ______ performed a flip.", "She is a talented ______."] }
+    { word: "gymnast", definition: "a person who performs flips, jumps and balance skills", examples: ["The ______ performed a flip.", "She is a talented ______."] }
   ]
 };
 
@@ -62,13 +62,17 @@ function goHome() {
   `;
 }
 
+function goBack() {
+  selectList(currentList);
+}
+
 function selectList(listName) {
   currentList = listName;
   document.getElementById('root').innerHTML = `
     <h1>${listName}</h1>
     <button onclick="startQuiz()">Start Quiz</button>
     <button onclick="viewWords()">View Words</button>
-    <button onclick="goHome()">Back</button>
+    <button onclick="goHome()">Back to Main Menu</button>
     <div id="content"></div>
   `;
 }
@@ -84,7 +88,7 @@ function viewWords() {
         ${w.examples.map(e => `<div><em>${e}</em></div>`).join('')}
       </div>
     `).join('')}
-    <button onclick="goHome()">Back</button>
+    <button onclick="goBack()">Back</button>
   `;
 }
 
