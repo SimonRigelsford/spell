@@ -40,7 +40,6 @@ const wordLists = {
     { word: "gymnast", definition: "a person trained in gymnastics", examples: ["The ______ performed a flip.", "She is a talented ______."] }
   ]
 };
-
 let currentList = null;
 let quizWords = [];
 let wrongWords = [];
@@ -95,7 +94,6 @@ function startQuiz() {
   currentIndex = 0;
   showQuiz();
 }
-
 function showQuiz() {
   if (currentIndex >= quizWords.length) {
     if (wrongWords.length) {
@@ -119,13 +117,14 @@ function showQuiz() {
       <br>
       <button onclick="speak('${word.word}')">Hear Word</button>
       <br><br>
-      <input id="userInput" type="text" placeholder="Type the word" autofocus onkeydown="if(event.key==='Enter') checkAnswer()">
+      <input id="userInput" type="text" placeholder="Type the word" onkeydown="if(event.key==='Enter') checkAnswer()">
       <div id="message" style="margin-top:10px; font-weight:bold;"></div>
       <br>
       <button onclick="checkAnswer()">Check</button>
     </div>
   `;
 
+  document.getElementById('userInput').focus(); // Make sure typing is automatic!
   speak(word.word);
 }
 
@@ -148,4 +147,5 @@ function checkAnswer() {
   }
 }
 
+// Start the app!
 goHome();
