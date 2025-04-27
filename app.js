@@ -8,7 +8,7 @@ const wordLists = {
     { word: "hear", definition: "perceive with the ear", examples: ["Can you ______ the music playing?", "I ______ a noise outside."] },
     { word: "here", definition: "in this place", examples: ["Come ______ and sit next to me.", "Your book is right ______."] },
     { word: "where", definition: "in or to what place", examples: ["Do you know ______ she went?", "Tell me ______ you are."] },
-    { word: "were", definition: "past tense of are", examples: ["They ______ playing outside all afternoon.", "We ______ were very tired after the trip."] },
+    { word: "were", definition: "past tense of are", examples: ["They ______ playing outside all afternoon.", "We ______ very tired after the trip."] },
     { word: "people", definition: "human beings in general", examples: ["There were many ______ at the concert.", "The ______ in the village were friendly."] },
     { word: "night", definition: "the time of darkness between sunset and sunrise", examples: ["We stayed up late into the ______.", "It was a cold ______."] },
     { word: "father", definition: "a male parent", examples: ["Her ______ made breakfast every morning.", "My ______ is reading a book."] },
@@ -140,20 +140,19 @@ function checkAnswer() {
   const input = document.getElementById('userInput').value.trim().toLowerCase();
   const correct = quizWords[currentIndex].word.toLowerCase();
   const messageDiv = document.getElementById('message');
-  
+
   if (input === correct) {
     messageDiv.textContent = "✅ Correct!";
     currentIndex++;
     setTimeout(showQuiz, 1000);
   } else {
-    messageDiv.textContent = `❌ Try again! Correct spelling was: ${quizWords[currentIndex].word}`;
-    if (!wrongWords.includes(quizWords[currentIndex])) {
-      wrongWords.push(quizWords[currentIndex]);
-    }
-    currentIndex++;
-    setTimeout(showQuiz, 2000);
+    messageDiv.textContent = "❌ Incorrect. Please try again.";
+    setTimeout(() => {
+      document.getElementById('userInput').value = '';
+      document.getElementById('userInput').focus();
+      messageDiv.textContent = '';
+    }, 1000);
   }
 }
 
 goHome();
-
