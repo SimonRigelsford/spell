@@ -1,4 +1,3 @@
-
 const wordLists = {
   "Summer 1 Week 1": [
     { word: "would", definition: "used to indicate a possible situation or action", examples: ["I ______ like to go to the park today.", "He said he ______ bring the book tomorrow."] },
@@ -18,7 +17,7 @@ const wordLists = {
     { word: "water", definition: "a clear liquid essential for life", examples: ["Drink plenty of ______ every day.", "The glass was full of ______."] },
     { word: "friend", definition: "a person with whom one has a bond of mutual affection", examples: ["My best ______ and I went to the beach.", "He is a good ______."] },
     { word: "knight", definition: "a man awarded a non-hereditary title of honour", examples: ["The ______ rode a horse in shining armour.", "He was made a ______ by the Queen."] },
-    { word: "children", definition: "young human beings below the age of puberty", examples: ["The ______ played in the park all afternoon.", "Many ______ enjoy reading stories."] }
+    { word: "children", definition: "young human beings", examples: ["The ______ played in the park all afternoon.", "Many ______ enjoy reading stories."] }
   ],
   "Spring 2 Week 6": [
     { word: "purple", definition: "a colour between blue and red", examples: ["She wore a ______ dress.", "The flower was a bright shade of ______."] },
@@ -42,15 +41,111 @@ const wordLists = {
   ]
 };
 
-document.getElementById('root').innerHTML = `
-<h1>Choose a List</h1>
-<button onclick="startGame('Summer 1 Week 1')">Summer 1 Week 1</button>
-<button onclick="startGame('Spring 2 Week 6')">Spring 2 Week 6</button>
-<div id="content"></div>
-`;
+let currentList = null;
+let quizWords = [];
+let wrongWords = [];
+let round = 1;
+let currentIndex = 0;
 
-function startGame(listName) {
-  const list = wordLists[listName];
-  document.getElementById('content').innerHTML = '<p>Loading quiz...</p>';
-  alert('Game starting soon! (Placeholder)');
+function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-GB';
+  window.speechSynthesis.speak(utterance);
 }
+
+function goHome() {
+  document.getElementById('root').innerHTML = `
+    <h1>Choose a List</h1>
+    <button onclick="selectList('Summer 1 Week 1')">Summer 1 Week 1</button>
+    <button onclick="selectList('Spring 2 Week 6')">Spring 2 Week 6</button>
+    <div id="content"></div>
+  `;
+}
+
+function selectList(listName) {
+  currentList = listName;
+  document.getElementById('root').innerHTML = `
+    <h1>${listName}</h1>
+    <button onclick="startQuiz()">Start Quiz</button>
+    <button onclick="viewWords()">View Words</button>
+    <button onclick="goHome()">Back</button>
+    <div id="content"></div>
+  `;
+}
+
+function viewWords() {
+  const words = wordLists[currentList];
+  document.getElementById('content').innerHTML = `
+    <h2>${currentList} - Words</h2>
+    ${words.map(w => `
+      <div class="card">
+        <h3>${w.word}</h3>
+        <p><strong>${w.definition}</strong></p>
+        ${w.examples.map(e => `<div><em>${e}</em></div>`).join('')}
+      </div>
+    `).join('')}
+    <button onclick="goHome()">Back</button>
+  `;
+}
+
+function startQuiz() {
+  quizWords = [...wordLists[currentList]];
+  wrongWords = [];
+  round = 1;
+  currentIndex = 0;
+  showQuiz();
+}
+
+function showQuiz() {
+  if (currentIndex >= quizWords.length) {
+    if (wrongWords.length) {
+      quizWords = [...wrongWords];
+      wrongWords = [];
+      round++;
+      currentIndex = 0;
+      document.getElementById('content').innerHTML = `<h2>Round ${round} begins!</h2><button onclick="showQuiz()">Start!</button>`;
+    } else {
+      document.getElementById('content').innerHTML = `<h2>🎉 Congratulations! You completed the test!</h2><button onclick="goHome()">Home</button>`;
+    }
+    return;
+  }
+
+  const word = quizWords[currentIndex];
+  document.getElementById('content').innerHTML = `
+    <h2>${currentList} - Round ${round}</h2>
+    <div class="card">
+      <p><strong>${word.definition}</strong></p>
+      ${word.examples.map(e => `<div><em>${e}</em></div>`).join('')}
+      <br>
+      <button onclick="speak('${word.word}')">Hear Word</button>
+      <br><br>
+      <input id="userInput" type="text" placeholder="Type the word" autofocus onkeydown="if(event.key==='Enter') checkAnswer()">
+      <div id="message" style="margin-top:10px; font-weight:bold;"></div>
+      <br>
+      <button onclick="checkAnswer()">Check</button>
+    </div>
+  `;
+
+  speak(word.word);
+}
+
+function checkAnswer() {
+  const input = document.getElementById('userInput').value.trim().toLowerCase();
+  const correct = quizWords[currentIndex].word.toLowerCase();
+  const messageDiv = document.getElementById('message');
+  
+  if (input === correct) {
+    messageDiv.textContent = "✅ Correct!";
+    currentIndex++;
+    setTimeout(showQuiz, 1000);
+  } else {
+    messageDiv.textContent = `❌ Try again! Correct spelling was: ${quizWords[currentIndex].word}`;
+    if (!wrongWords.includes(quizWords[currentIndex])) {
+      wrongWords.push(quizWords[currentIndex]);
+    }
+    currentIndex++;
+    setTimeout(showQuiz, 2000);
+  }
+}
+
+goHome();
