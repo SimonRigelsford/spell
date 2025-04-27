@@ -8,7 +8,7 @@ const wordLists = {
     { word: "hear", definition: "perceive with the ear", examples: ["Can you ______ the music playing?", "I ______ a noise outside."] },
     { word: "here", definition: "in this place", examples: ["Come ______ and sit next to me.", "Your book is right ______."] },
     { word: "where", definition: "in or to what place", examples: ["Do you know ______ she went?", "Tell me ______ you are."] },
-    { word: "were", definition: "past tense of are", examples: ["They ______ playing outside all afternoon.", "We ______ very tired after the trip."] },
+    { word: "were", definition: "past tense of are", examples: ["They ______ playing outside all afternoon.", "We ______ were very tired after the trip."] },
     { word: "people", definition: "human beings in general", examples: ["There were many ______ at the concert.", "The ______ in the village were friendly."] },
     { word: "night", definition: "the time of darkness between sunset and sunrise", examples: ["We stayed up late into the ______.", "It was a cold ______."] },
     { word: "father", definition: "a male parent", examples: ["Her ______ made breakfast every morning.", "My ______ is reading a book."] },
@@ -40,6 +40,7 @@ const wordLists = {
     { word: "gymnast", definition: "a person trained in gymnastics", examples: ["The ______ performed a flip.", "She is a talented ______."] }
   ]
 };
+
 let currentList = null;
 let quizWords = [];
 let wrongWords = [];
@@ -94,6 +95,7 @@ function startQuiz() {
   currentIndex = 0;
   showQuiz();
 }
+
 function showQuiz() {
   if (currentIndex >= quizWords.length) {
     if (wrongWords.length) {
@@ -125,8 +127,12 @@ function showQuiz() {
   `;
 
   setTimeout(() => {
-  document.getElementById('userInput').focus();
-}, 50); // Make sure typing is automatic!
+    const input = document.getElementById('userInput');
+    if (input) {
+      input.focus();
+    }
+  }, 50);
+
   speak(word.word);
 }
 
@@ -149,5 +155,5 @@ function checkAnswer() {
   }
 }
 
-// Start the app!
 goHome();
+
