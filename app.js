@@ -37,7 +37,7 @@ const wordLists = {
     { word: "magician", definition: "a person who performs magic tricks", examples: ["The ______ pulled a rabbit from the hat.", "Everyone clapped for the ______."] },
     { word: "mystery", definition: "something difficult to explain or understand", examples: ["The book was a thrilling ______.", "Solving the ______ took weeks."] },
     { word: "typical", definition: "usual or expected", examples: ["It was a ______ rainy day.", "She gave a ______ answer."] },
-    { word: "gymnast", definition: "a person who performs flips, jumps and balance skills", examples: ["The ______ performed a flip.", "She is a talented ______."] }
+    { word: "gymnast", definition: "a person who performs flips, jumps, and balance skills", examples: ["The ______ performed a flip.", "She is a talented ______."] }
   ]
 };
 
@@ -46,6 +46,7 @@ let quizWords = [];
 let wrongWords = [];
 let round = 1;
 let currentIndex = 0;
+let mustTypeCorrect = false; // NEW
 
 function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
@@ -145,18 +146,36 @@ function checkAnswer() {
   const correct = quizWords[currentIndex].word.toLowerCase();
   const messageDiv = document.getElementById('message');
 
-  if (input === correct) {
-    messageDiv.textContent = "✅ Correct!";
-    currentIndex++;
-    setTimeout(showQuiz, 1000);
+  if (mustTypeCorrect) {
+    if (input === correct) {
+      mustTypeCorrect = false;
+      messageDiv.textContent = "✅ Correct!";
+      currentIndex++;
+      setTimeout(showQuiz, 1000);
+    } else {
+      messageDiv.textContent = "❌ Please type the correct spelling shown.";
+      setTimeout(() => {
+        document.getElementById('userInput').value = '';
+        document.getElementById('userInput').focus();
+        messageDiv.textContent = '';
+      }, 1000);
+    }
   } else {
-    messageDiv.textContent = "❌ Incorrect. Please try again.";
-    setTimeout(() => {
-      document.getElementById('userInput').value = '';
-      document.getElementById('userInput').focus();
-      messageDiv.textContent = '';
-    }, 1000);
+    if (input === correct) {
+      messageDiv.textContent = "✅ Correct!";
+      currentIndex++;
+      setTimeout(showQuiz, 1000);
+    } else {
+      mustTypeCorrect = true;
+      messageDiv.textContent = `❌ Incorrect. Please type: ${quizWords[currentIndex].word}`;
+      setTimeout(() => {
+        document.getElementById('userInput').value = '';
+        document.getElementById('userInput').placeholder = quizWords[currentIndex].word;
+        document.getElementById('userInput').focus();
+      }, 1000);
+    }
   }
 }
 
 goHome();
+
