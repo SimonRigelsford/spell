@@ -46,7 +46,7 @@ let quizWords = [];
 let wrongWords = [];
 let round = 1;
 let currentIndex = 0;
-let mustTypeCorrect = false; // NEW
+let mustTypeCorrect = false; // NEW - force typing correct after mistake
 
 function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
@@ -153,7 +153,7 @@ function checkAnswer() {
       currentIndex++;
       setTimeout(showQuiz, 1000);
     } else {
-      messageDiv.textContent = "❌ Please type the correct spelling shown.";
+      messageDiv.textContent = `❌ Please type the correct spelling: ${quizWords[currentIndex].word}`;
       setTimeout(() => {
         document.getElementById('userInput').value = '';
         document.getElementById('userInput').focus();
@@ -167,7 +167,7 @@ function checkAnswer() {
       setTimeout(showQuiz, 1000);
     } else {
       mustTypeCorrect = true;
-      messageDiv.textContent = `❌ Incorrect. Please type: ${quizWords[currentIndex].word}`;
+      messageDiv.textContent = `❌ Incorrect. The correct spelling is: ${quizWords[currentIndex].word}`;
       setTimeout(() => {
         document.getElementById('userInput').value = '';
         document.getElementById('userInput').placeholder = quizWords[currentIndex].word;
@@ -178,4 +178,3 @@ function checkAnswer() {
 }
 
 goHome();
-
