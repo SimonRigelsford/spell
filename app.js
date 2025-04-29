@@ -39,8 +39,6 @@ const wordLists = {
     { word: "knight", definition: "a man awarded a non-hereditary title of honour", examples: ["The ______ rode a horse in shining armour.", "He was made a ______ by the Queen."] },
     { word: "children", definition: "young human beings", examples: ["The ______ played in the park all afternoon.", "Many ______ enjoy reading stories."] }
   ],
-  // ✨ (I will post Summer 1 Week 2, 3, 4, 5, 6, 7 immediately after this in PART 2 because it's very long!) 
-};
   "Summer 1 Week 2": [
     { word: "consider", definition: "to think about carefully", examples: ["Please ______ the question before you answer.", "You should ______ all the options."] },
     { word: "describe", definition: "to say or write what something is like", examples: ["Can you ______ the painting?", "Please ______ what you saw."] },
